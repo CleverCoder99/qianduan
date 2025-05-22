@@ -1,388 +1,296 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>漂流瓶 - Ocean Whisper</title>
-    <!-- tsParticles CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/tsparticles@3.0.3/tsparticles.bundle.min.js"></script>
-    <style>
+  <meta charset="UTF-8" />
+  <title>漂流瓶 Ocean Whisper 背景特效</title>
+  <style>
     html, body {
-        height: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: #2d559d; /* 深蓝基底，与你截图主色一致 */
     }
-    body {
-        min-height: 100vh;
-        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-        color: #333;
-        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        line-height: 1.6;
-        position: relative;
-        overflow: hidden;
+    #bg-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
     }
-
-    #tsparticles {
-        position: fixed;
-        top: 0; left: 0;
-        width: 100vw;
-        height: 100vh;
-        z-index: 0;
-        pointer-events: none;
+    /* 你的主体内容样式可以保持不变 */
+    .main-content {
+      position: absolute;
+      left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      background: #f8fbfd;
+      border-radius: 22px;
+      box-shadow: 0 8px 32px 0 rgba(33, 110, 185, 0.16), 0 1.5px 4px 0 #1396d9;
+      padding: 40px 60px 32px 60px;
+      min-width: 350px;
+      z-index: 1;
+      border: 3px solid #21b9ec20;
     }
-
-    #app {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-        position: relative;
-        z-index: 1;
+    .main-content h1 {
+      color: #3260a2;
+      font-size: 2.2em;
+      margin-bottom: 0.4em;
+      letter-spacing: 0.04em;
+      font-weight: 700;
+      text-align: center;
     }
-
-    .container {
-        width: 400px;
-        background: rgba(255,255,255,0.95);
-        border-radius: 20px;
-        padding: 32px 24px 24px 24px;
-        text-align: center;
-        box-shadow: 0 12px 32px rgba(30,60,114,0.16), 0 0px 0px #0000;
-        border: 2px solid #56CCF2;
-        backdrop-filter: blur(2px);
+    .main-content p {
+      color: #6c7ba4;
+      text-align: center;
+      font-size: 1.1em;
     }
-
-    .container h1 {
-        margin: 0 0 16px;
-        font-weight: 700;
-        font-size: 2.2rem;
-        letter-spacing: 2px;
-        color: #2a5298;
-        text-shadow: 0 2px 10px rgba(90, 180, 255, 0.18);
+    .main-content a {
+      color: #2091f7;
+      font-weight: bold;
+      text-decoration: underline;
+      display: block;
+      text-align: center;
+      margin: 0.8em 0 1.4em 0;
+      font-size: 1.06em;
     }
-
-    .info-text {
-        color: #666;
-        margin-bottom: 22px;
-        font-size: 1.05rem;
-        letter-spacing: 0.2px;
+    .main-content .btns {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      margin-top: 18px;
     }
-
-    .hover-text {
-        position: relative;
-        cursor: pointer;
-        color: #409EFF;
-        text-decoration: underline;
-        transition: color 0.3s;
-        font-weight: 500;
-        letter-spacing: 0.5px;
+    .main-content button {
+      flex: 1;
+      border: none;
+      border-radius: 28px;
+      font-size: 1.1em;
+      font-weight: 600;
+      padding: 14px 0;
+      margin: 0;
+      color: #fff;
+      box-shadow: 0 3px 18px 0 rgba(33, 110, 185, 0.10);
+      transition: transform 0.12s, box-shadow 0.12s;
+      cursor: pointer;
+      outline: none;
     }
-
-    .hover-text:hover {
-        color: #2a5298;
-        text-shadow: 0 2px 8px rgba(64, 158, 255, 0.1);
+    .main-content button:nth-child(1) { background: linear-gradient(90deg,#3cc5ff 40%,#47b7ff 100%);}
+    .main-content button:nth-child(2) { background: linear-gradient(90deg,#39ffd7 20%,#3be7b9 100%);}
+    .main-content button:nth-child(3) { background: linear-gradient(90deg,#ffd643 10%,#ffb633 100%);}
+    .main-content button:hover {
+      transform: translateY(-2px) scale(1.04);
+      box-shadow: 0 8px 24px 0 rgba(33, 110, 185, 0.13);
     }
-
-    .button-group {
-        display: flex;
-        justify-content: center;
-        gap: 16px;
-        margin: 28px 0 18px 0;
+    @media (max-width:600px) {
+      .main-content {
+        padding: 20px 8px 18px 8px;
+        min-width: initial;
+        width: 96vw;
+      }
+      .main-content .btns {
+        flex-direction: column;
+        gap: 10px;
+      }
     }
-
-    .main-btn {
-        padding: 12px 34px;
-        border-radius: 32px;
-        border: none;
-        cursor: pointer;
-        font-size: 16px;
-        font-weight: 600;
-        letter-spacing: 1px;
-        box-shadow: 0 3px 12px rgba(60, 120, 200, 0.13);
-        outline: none;
-        transition: 
-            background 0.24s, 
-            color 0.18s, 
-            transform 0.2s,
-            box-shadow 0.2s;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .btn-blue {
-        background: linear-gradient(90deg, #56CCF2 0%, #2F80ED 100%);
-        color: white;
-        border: none;
-    }
-    .btn-blue:hover {
-        background: linear-gradient(90deg, #2F80ED 0%, #56CCF2 100%);
-        box-shadow: 0 8px 24px 0 rgba(86,204,242,0.18);
-        color: #fff;
-        transform: translateY(-4px) scale(1.05) rotate(-2deg);
-    }
-
-    .btn-green {
-        background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%);
-        color: #fff;
-        border: none;
-    }
-    .btn-green:hover {
-        background: linear-gradient(90deg, #38f9d7 0%, #43e97b 100%);
-        color: #fff;
-        box-shadow: 0 8px 24px 0 rgba(67,233,123,0.18);
-        transform: translateY(-4px) scale(1.05) rotate(2deg);
-    }
-
-    .btn-orange {
-        background: linear-gradient(90deg, #f7971e 0%, #ffd200 100%);
-        color: #fff;
-        border: none;
-    }
-    .btn-orange:hover {
-        background: linear-gradient(90deg, #ffd200 0%, #f7971e 100%);
-        box-shadow: 0 8px 24px 0 rgba(247,151,30,0.14);
-        color: #fff;
-        transform: translateY(-4px) scale(1.07) rotate(-1deg);
-    }
-
-    .main-btn:active {
-        transform: scale(0.96);
-    }
-
-    hr {
-        margin: 24px 0;
-        opacity: 0.2;
-        border: none;
-        border-top: 1.5px solid #a3c8f4;
-    }
-
-    /* Dialog Styles */
-    .dialog-mask {
-        position: fixed;
-        top: 0; left: 0;
-        width: 100vw; height: 100vh;
-        background: rgba(30,60,114,0.12);
-        display: none;
-        justify-content: center;
-        align-items: center;
-        z-index: 10;
-        transition: background 0.25s;
-    }
-    .dialog-mask.active { display: flex; }
-
-    .dialog-content {
-        background: white;
-        border-radius: 16px;
-        width: 500px;
-        padding: 28px 28px 18px 28px;
-        position: relative;
-        box-shadow: 0 8px 32px rgba(30,60,114,0.16);
-        animation: popupIn 0.33s cubic-bezier(.23,1.01,.32,1.01);
-    }
-
-    @keyframes popupIn {
-        0% { transform: scale(0.85) translateY(30px); opacity: 0; }
-        100% { transform: scale(1) translateY(0); opacity: 1; }
-    }
-
-    .dialog-header {
-        font-size: 20px;
-        font-weight: 700;
-        padding-bottom: 12px;
-        border-bottom: 1px solid #eee;
-        margin-bottom: 22px;
-        color: #2a5298;
-    }
-
-    .form-group {
-        text-align: left;
-        margin-bottom: 18px;
-    }
-    .form-label {
-        display: block;
-        margin-bottom: 7px;
-        color: #333;
-        font-weight: 500;
-    }
-    .form-input, .form-input:focus {
-        width: 100%;
-        padding: 9px 12px;
-        border: 1.5px solid #cbe0fc;
-        border-radius: 6px;
-        font-size: 15px;
-        outline: none;
-        transition: border 0.2s;
-        background: #fafcff;
-        resize: none;
-    }
-    .form-input:focus {
-        border: 1.5px solid #2a5298;
-        background: #f0f7ff;
-    }
-    textarea.form-input {
-        min-height: 60px;
-    }
-
-    .dialog-footer {
-        display: flex;
-        justify-content: flex-end;
-        gap: 14px;
-        margin-top: 18px;
-    }
-
-    .close-btn {
-        padding: 9px 20px;
-        border: 1.5px solid #cbe0fc;
-        border-radius: 28px;
-        cursor: pointer;
-        background: #f5faff;
-        transition: background 0.2s, border 0.2s, color 0.2s;
-        font-weight: 500;
-        color: #2a5298;
-        font-size: 15px;
-    }
-    .close-btn:hover {
-        background: #eaf3ff;
-        border: 1.5px solid #2a5298;
-        color: #1e3c72;
-    }
-    </style>
+  </style>
 </head>
 <body>
-    <!-- 粒子背景 -->
-    <div id="tsparticles"></div>
 
-    <div id="app">
-        <div class="container">
-            <h1>漂流瓶 - Ocean Whisper</h1>
-            <p class="info-text">
-                当前有 <span id="count">740</span> 只瓶子孤独地漂浮在海洋上
-            </p>
-            <p class="info-text">
-                <span class="hover-text">点击探索神秘漂流瓶</span>
-            </p>
-            <div class="button-group">
-                <button type="button" class="main-btn btn-blue" id="openRandom">捞一个</button>
-                <button type="button" class="main-btn btn-green" id="openPrecise">精准打捞</button>
-                <button type="button" class="main-btn btn-orange" id="openThrow">丢一个</button>
-            </div>
-            <hr>
-        </div>
+  <canvas id="bg-canvas"></canvas>
+  
+  <div class="main-content">
+    <h1>漂流瓶 - Ocean Whisper</h1>
+    <p>当前有 740 只瓶子孤独地漂浮在海洋上</p>
+    <a href="#">点击探索神秘漂流瓶</a>
+    <div class="btns">
+      <button>捞一个<br>⬆️</button>
+      <button>精准打捞</button>
+      <button>丢一个<br>➡️</button>
     </div>
+  </div>
+  <script>
+    // 背景
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
+    let w = window.innerWidth;
+    let h = window.innerHeight;
+    function resize() {
+      w = window.innerWidth;
+      h = window.innerHeight;
+      canvas.width = w;
+      canvas.height = h;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+    const waves = [
+      {amp: 28, len: 360, speed: 0.13, color: "rgba(60,180,255,0.16)", offset: 0.55},
+      {amp: 18, len: 160, speed: 0.21, color: "rgba(120,220,255,0.11)", offset: 0.63},
+      {amp: 9, len: 70, speed: 0.31, color: "rgba(255,255,255,0.06)", offset: 0.60},
+    ];
 
-    <!-- 随机打捞弹窗 -->
-    <div class="dialog-mask" id="randomDialog">
-        <div class="dialog-content">
-            <div class="dialog-header">随机打捞结果</div>
-            <div id="randomContent">
-                <div class="loading" style="display: none;">正在深海搜索...</div>
-                <div class="content" style="display: none;">
-                    <p>瓶子ID：<span id="randomId"></span></p>
-                    <p>作者：<span id="randomAuthor"></span></p>
-                    <p>时间：<span id="randomTime"></span></p>
-                    <p>内容：<span id="randomContentText"></span></p>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="form-label">回复内容</label>
-                <input type="text" class="form-input" id="randomReply">
-            </div>
-            <div class="dialog-footer">
-                <button type="button" class="close-btn" id="randomPrev">再捞一个</button>
-                <button type="button" class="main-btn btn-blue" id="submitRandomReply">提交回复</button>
-            </div>
-        </div>
-    </div>
+    
+    class Bottle {
+      constructor() {
+        this.reset();
+      }
+      reset() {
+        this.x = Math.random() * w;
+        this.y = h * (0.54 + Math.random() * 0.09);
+        this.size = 26 + Math.random() * 8;
+        this.amp = 8 + Math.random() * 12;
+        this.phase = Math.random() * Math.PI * 2;
+        this.drift = 0.25 + Math.random() * 0.25;
+      }
+      move(t) {
+        this.x += this.drift;
+        if (this.x > w + 60) {
+          this.x = -60;
+          this.y = h * (0.54 + Math.random() * 0.09);
+        }
+      }
+      draw(ctx, t) {
+        ctx.save();
+        ctx.translate(this.x, this.y + Math.sin(t*0.002 + this.phase)*this.amp);
+        ctx.rotate(Math.sin(t*0.0016 + this.phase)*0.10);
+        // 瓶身
+        ctx.beginPath();
+        ctx.ellipse(0, 0, this.size * 0.34, this.size * 0.8, 0, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(188, 242, 255, 0.5)";
+        ctx.shadowColor = "#baf8ff";
+        ctx.shadowBlur = 4;
+        ctx.fill();
+        
+        ctx.beginPath();
+        ctx.ellipse(0, -this.size * 0.77, this.size * 0.12, this.size * 0.06, 0, 0, Math.PI * 2);
+        ctx.fillStyle = "#b7c3c9";
+        ctx.shadowBlur = 0;
+        ctx.fill();
+        // 木塞
+        ctx.beginPath();
+        ctx.ellipse(0, -this.size * 0.87, this.size * 0.07, this.size * 0.05, 0, 0, Math.PI * 2);
+        ctx.fillStyle = "#ccb68b";
+        ctx.globalAlpha = 0.89;
+        ctx.fill();
+        // 信纸
+        ctx.save();
+        ctx.rotate(-0.1);
+        ctx.beginPath();
+        ctx.rect(-this.size * 0.07, -this.size * 0.21, this.size * 0.15, this.size * 0.29);
+        ctx.fillStyle = "#fffbe8";
+        ctx.globalAlpha = 0.72;
+        ctx.shadowColor = "#fffbe8";
+        ctx.shadowBlur = 3;
+        ctx.fill();
+        ctx.restore();
+        // 高光
+        ctx.beginPath();
+        ctx.moveTo(-this.size*0.13, -this.size*0.45);
+        ctx.bezierCurveTo(-this.size*0.23, -this.size*0.25, -this.size*0.17, this.size*0.28, 0, this.size*0.6);
+        ctx.lineWidth = 1.2;
+        ctx.strokeStyle = "rgba(255,255,255,0.14)";
+        ctx.stroke();
+        ctx.restore();
+      }
+    }
+    const bottles = [];
+    for(let i=0; i<4; i++) bottles.push(new Bottle());
 
-    <!-- 精准打捞弹窗 -->
-    <div class="dialog-mask" id="preciseDialog">
-        <div class="dialog-content" id="preciseContent">
-            <div class="dialog-header">精准打捞</div>
-            <div class="stage1">
-                <div class="form-group">
-                    <label class="form-label">瓶子ID</label>
-                    <input type="text" class="form-input" id="preciseIdInput" placeholder="输入瓶子编号">
-                </div>
-                <div class="dialog-footer">
-                    <button type="button" class="close-btn" id="preciseCancel">取消</button>
-                    <button type="button" class="main-btn btn-green" id="preciseSearch">搜索</button>
-                </div>
-            </div>
-            <div class="stage2" style="display: none;">
-                <p>瓶子ID：<span id="preciseId"></span></p>
-                <p>作者：<span id="preciseAuthor"></span></p>
-                <p>时间：<span id="preciseTime"></span></p>
-                <p>内容：<span id="preciseContentText"></span></p>
-                <div class="form-group">
-                    <label class="form-label">精准回复</label>
-                    <input type="text" class="form-input" id="preciseReply">
-                </div>
-                <div class="dialog-footer">
-                    <button type="button" class="close-btn" id="preciseBack">返回搜索</button>
-                    <button type="button" class="main-btn btn-green" id="submitPreciseReply">提交回复</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    // 水泡
+    const bubbles = [];
+    for(let i=0;i<30;i++) {
+      bubbles.push({
+        x: Math.random()*w,
+        y: h * (0.60+0.35*Math.random()),
+        r: 2+Math.random()*4,
+        speed: 0.3+Math.random()*0.25,
+        alpha: 0.08+Math.random()*0.10
+      });
+    }
 
-    <!-- 丢瓶子弹窗 -->
-    <div class="dialog-mask" id="throwDialog">
-        <div class="dialog-content">
-            <div class="dialog-header">扔一个新漂流瓶</div>
-            <div class="form-group">
-                <label class="form-label">用户名</label>
-                <input type="text" class="form-input" id="throwUser" placeholder="一位不愿透露姓名的小可爱">
-            </div>
-            <div class="form-group">
-                <label class="form-label">内容</label>
-                <textarea class="form-input" id="throwContent" placeholder="输入你想要写入瓶内的悄悄话" rows="4"></textarea>
-            </div>
-            <div class="dialog-footer">
-                <button type="button" class="close-btn" id="throwCancel">取消</button>
-                <button type="button" class="main-btn btn-orange" id="submitThrow">扔进海里</button>
-            </div>
-        </div>
-    </div>
+    // 柔光
+    function drawGlow() {
+      for (let i = 0; i < 2; i++) {
+        const grad = ctx.createRadialGradient(
+          w*0.5 + Math.cos(i*1.5) * w*0.18,
+          h*0.28 + Math.sin(i*1.3) * 50,
+          0,
+          w*0.5 + Math.cos(i*1.5) * w*0.18,
+          h*0.28 + Math.sin(i*1.3) * 50,
+          w*0.7
+        );
+        grad.addColorStop(0, "rgba(200,255,255,0.10)");
+        grad.addColorStop(1, "rgba(10,40,80,0)");
+        ctx.save();
+        ctx.globalAlpha = 0.19;
+        ctx.globalCompositeOperation = "lighter";
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(w/2 + Math.cos(i*1.5) * w/5,
+                h*0.28 + Math.sin(i*1.3) * 60,
+                w*0.7, 0, Math.PI*2);
+        ctx.fill();
+        ctx.restore();
+      }
+      ctx.globalCompositeOperation = "source-over";
+    }
 
-    <!-- 粒子海洋特效配置 -->
-    <script>
-    window.addEventListener('DOMContentLoaded', () => {
-        tsParticles.load("tsparticles", {
-            fullScreen: { enable: false },
-            background: { color: "transparent" },
-            particles: {
-                number: { value: 90, density: { enable: true, area: 800 } },
-                color: { value: ["#56CCF2", "#2F80ED", "#43e97b", "#38f9d7", "#fff", "#bce6fd"] },
-                shape: {
-                    type: ["circle", "circle", "image"],
-                    image: [
-                        { src: "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f30a.svg", width: 32, height: 32 },
-                        { src: "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f381.svg", width: 32, height: 32 }
-                    ]
-                },
-                opacity: { value: 0.65, random: { enable: true, minimumValue: 0.35 } },
-                size: { value: { min: 3, max: 12 }, random: true },
-                move: {
-                    enable: true,
-                    speed: { min: 0.3, max: 1.3 },
-                    direction: "bottom",
-                    straight: false,
-                    outMode: "out",
-                    random: true
-                }
-            },
-            interactivity: {
-                events: {
-                    onHover: { enable: true, mode: "bubble" },
-                    onClick: { enable: true, mode: "repulse" }
-                },
-                modes: {
-                    bubble: { distance: 80, size: 18, duration: 0.4, opacity: 0.8 },
-                    repulse: { distance: 120, duration: 0.5 }
-                }
-            },
-            detectRetina: true
-        });
-    });
-    </script>
+    function drawWaves(t) {
+      for(let i=0;i<waves.length;i++) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(0,h);
+        for(let x=0;x<=w;x+=3) {
+          let y = h*waves[i].offset + Math.sin((x/waves[i].len)*Math.PI*2 + t*waves[i].speed)*waves[i].amp;
+          ctx.lineTo(x,y);
+        }
+        ctx.lineTo(w,h);
+        ctx.closePath();
+        ctx.fillStyle = waves[i].color;
+        ctx.globalAlpha = 1-i*0.23;
+        ctx.shadowColor = "#4bdfff";
+        ctx.shadowBlur = i===0 ? 14 : 0;
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    function drawBubbles() {
+      for(let b of bubbles) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(b.x,b.y,b.r,0,Math.PI*2);
+        ctx.globalAlpha = b.alpha;
+        ctx.fillStyle = "#fff";
+        ctx.shadowColor = "#aaffff";
+        ctx.shadowBlur = 5;
+        ctx.fill();
+        ctx.restore();
+        b.y -= b.speed;
+        if (b.y < h*0.52) {
+          b.x = Math.random()*w;
+          b.y = h * (0.60+0.35*Math.random());
+          b.r = 2+Math.random()*4;
+          b.alpha = 0.08+Math.random()*0.10;
+        }
+      }
+    }
+    function drawBottles(t) {
+      for(let bottle of bottles) {
+        bottle.move(t);
+        bottle.draw(ctx,t);
+      }
+    }
+    function animate(t) {
+      ctx.clearRect(0,0,w,h);
+      drawGlow();
+      drawWaves(t*0.0015);
+      drawBubbles();
+      drawBottles(t);
+      requestAnimationFrame(animate);
+    }
+    animate(0);
+    
+  </script>
+  
 </body>
 </html>
