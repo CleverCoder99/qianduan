@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+    <style>
+
+
+
+body {
+      background: #3f3bbd;
+      color: #333;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+#app {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+}
+/* vh值=指窗口的可视区域100vh指满窗口的值 */
+
+.container{
+
+width: 400px;
+      background: #fff;
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+
+
+
+
+
+
+}
+    </style>
+    <body>
+        <div id="app">
+            <div class="container">
+                <h1>漂流瓶 -Ocean- Whisper</h1>
+                <div class="middle">
+                    <p>
+                        当前有
+                        <span id="number">740</span>
+                        <span class="content">只瓶子孤独的漂浮在海洋上</span>
+                    </p>
+                    <p class="middle content" style="color:#2206d7; text-decoration:underline">但是呢！你有拯救他们的力量！</p>
+                    <em>点击下方按钮捞一个/精准打捞/丢一个漂流瓶试试吧</em>
+                    <div class="button" style="color:aliceblue">
+                        <button type="button" style="background-color:blue">捞一个</button>
+                    </div>
+                    <div class="button" style=" color:#ffff">
+                        <button type="button" style=" background-color:#00ff00">精准打捞！</button>
+                        <div class="button">
+                            <button type="button" style="color:#ffa500">丢一个!</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- 捞一个页面 -->
+                <div class="new piaoliuping ">
+                    <div class="new">
+                        <div id="title">
+                            <em>扔一个新的漂流瓶</em>
+                        </div>
+                        <div class="username" style="font-family:黑体">用户名</div>
+                        <input type="text" placeholder="一位不愿透露姓名的小可爱" style="width:400px;height:30px;">
+                        <div class="content" style="font-family:黑体 ">内容</div>
+                        <input type="text" style="width:400px; height:120px;" placeholder="输入你想要写入瓶内的悄悄话">
+                        <!-- 精准打捞界面 -->
+                        <header>
+                            <div class="主题" style="font-size: small;">
+                                <h1>
+                                    精准打捞
+                                </h1>
+                            </div>
+                        </header>
+                        <div class="sub-title">瓶子ID</div>
+                        <input type="text" style="width:400px; height:20px;" placeholder="输入瓶子编号">
+                        <div class="right-button">
+                            <button type="button">取消</button>
+                            <button type="button">搜索</button>
+                        </div>
+                        <div class="rentitle">
+                            <div id="zhutitle">
+                                <header>
+                                    <div>
+                                        扔一个新的漂流瓶
+                                    </div>
+                                </header>
+                                <div id="username">用户名</div>
+                                <input type="text" style="width:400px;height:20px;" placeholder="一位不愿透露姓名的小可爱">
+                                <div class="content1">内容</div>
+                                <input type="text" placeholder="输入你想要写入瓶内的悄悄话" style="width:400px;height:150px;">
+                                <div class="anniu">
+                                    <div>
+                                        <button type="button">取消</button>
+                                    </div>
+                                    <div>
+                                        <button type="button">发呀的喂!</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
