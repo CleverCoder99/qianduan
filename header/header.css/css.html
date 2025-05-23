@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <style>
+        html, body {
+            height: 100%; 
+        }
+        body {
+            min-height: 100vh;
+            /* 增强版海洋渐变背景 */
+            background: linear-gradient(180deg, #021b79 0%, #0575e6 40%, #6dd5ed 70%, #ffffff 100%);
+            background-size: 200% 200%;
+            animation: oceanGradient 20s ease-in-out infinite;
+            color: #333;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 动态渐变背景动画 */
+        @keyframes oceanGradient {
+            0% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+            100% { background-position: 0% 0%; }
+        }
+
+        /* 增强版波浪背景 */
+        .ocean-waves {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            z-index: 0;
+        }
+        .wave {
+            position: absolute;
+            bottom: 0;
+            width: 200%;
+            height: 100%;
+            background-repeat: repeat-x;
+            animation: waveMove 10s linear infinite;
+        }
+        .wave-1 {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M0,0 C432.5,120 767.5,120 1200,0 L1200,120 L0,120 Z" fill="rgba(255,255,255,0.1)"/></svg>');
+            background-size: 50% 100%;
+            opacity: 0.8;
+        }
+        .wave-2 {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M0,0 C432.5,120 767.5,120 1200,0 L1200,120 L0,120 Z" fill="rgba(255,255,255,0.05)"/></svg>');
+            background-size: 60% 100%;
+            animation-delay: -5s;
+            opacity: 0.6;
+        }
+        .wave-3 {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M0,60 C432.5,180 767.5,-60 1200,60 L1200,120 L0,120 Z" fill="rgba(255,255,255,0.08)"/></svg>');
+            background-size: 70% 100%;
+            animation-delay: -3s;
+            opacity: 0.7;
+        }
+
+        @keyframes waveMove {
+            0% { transform: translateX(-25%); }
+            100% { transform: translateX(25%); }
+        }
+
+        /* 阳光穿透效果 */
+        .sun-rays {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(
+                ellipse at center,
+                rgba(255, 255, 255, 0.25) 0%,
+                rgba(255, 255, 255, 0) 70%
+            );
+            opacity: 0.6;
+            z-index: 0;
+            animation: sunPulse 15s ease-in-out infinite;
+        }
+
+        @keyframes sunPulse {
+            0% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.05); }
+            100% { opacity: 0.4; transform: scale(1); }
+        }
+
+        /* 海底光影效果 */
+        .ocean-floor {
+            position: absolute;
+            bottom: -100px;
+            left: 0;
+            width: 100%;
+            height: 150px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,100 Q25,75 50,100 T100,100" fill="rgba(2, 27, 121, 0.1)"/><path d="M0,100 Q25,85 50,100 T100,100" fill="rgba(2, 27, 121, 0.05)"/></svg>');
+            background-size: 100px 100px;
+            z-index: 0;
+            animation: oceanFloorMove 60s linear infinite;
+        }
+
+        @keyframes oceanFloorMove {
+            0% { background-position: 0 0; }
+            100% { background-position: -1000px 0; }
+        }
+
+        /* 海洋生物元素 */
+        .sea-creature {
+            position: absolute;
+            background-size: contain;
+            background-repeat: no-repeat;
+            z-index: 0;
+            opacity: 0.8;
+            animation-timing-function: ease-in-out;
+        }
+        .jellyfish {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="50" viewBox="0 0 40 50"><circle cx="20" cy="15" r="15" fill="rgba(255,255,255,0.3)"/><path d="M5,15 Q20,30 35,15" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"/><path d="M8,15 Q20,35 32,15" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"/><path d="M11,15 Q20,40 29,15" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"/></svg>');
+            width: 40px;
+            height: 50px;
+            animation: float 8s infinite;
+        }
+        .fish {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="20" viewBox="0 0 30 20"><path d="M0,10 Q10,0 20,10 Q10,20 0,10 Z" fill="rgba(86,204,242,0.5)"/><path d="M20,10 L30,5 L30,15 Z" fill="rgba(86,204,242,0.5)"/></svg>');
+            width: 30px;
+            height: 20px;
+            animation: swim 15s infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+            100% { transform: translateY(0) rotate(0deg); }
+        }
+
+        @keyframes swim {
+            0% { transform: translateX(0) rotateY(0deg); }
+            49% { transform: translateX(100vw) rotateY(0deg); }
+            50% { transform: translateX(100vw) rotateY(180deg); }
+            99% { transform: translateX(0) rotateY(180deg); }
+            100% { transform: translateX(0) rotateY(0deg); }
+        }
+
+        #tsparticles {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        #app {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+
+        .container {
+            width: 400px;
+            background: rgba(255,255,255,0.92);
+            border-radius: 20px;
+            padding: 32px 24px 24px 24px;
+            text-align: center;
+            box-shadow: 0 12px 32px rgba(30,60,114,0.16), 0 4px 8px rgba(86,204,242,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            backdrop-filter: blur(12px);
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* 容器底部光晕效果 */
+        .container::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: -15px;
+            right: -15px;
+            height: 30px;
+            background: radial-gradient(
+                ellipse at center,
+                rgba(86, 204, 242, 0.3) 0%,
+                rgba(86, 204, 242, 0) 70%
+            );
+            z-index: -1;
+            filter: blur(10px);
+        }
+        
+        .container:hover {
+            transform: translateY(-8px);
+        }
+
+        .container h1 {
+            margin: 0 0 16px;
+            font-weight: 700;
+            font-size: 2.2rem;
+            letter-spacing: 2px;
+            color: #021b79;
+            text-shadow: 0 2px 10px rgba(90, 180, 255, 0.25);
+            position: relative;
+        }
+        
+        /* 标题装饰 */
+        .container h1::before,
+        .container h1::after {
+            content: '';
+            position: absolute;
+            height: 2px;
+            width: 30px;
+            background: #56CCF2;
+            top: 50%;
+        }
+        .container h1::before {
+            left: 20%;
+        }
+        .container h1::after {
+            right: 20%;
+        }
+
+        .info-text {
+            color: #333;
+            margin-bottom: 22px;
+            font-size: 1.05rem;
+            letter-spacing: 0.2px;
+        }
+
+        .hover-text {
+            position: relative;
+            cursor: pointer;
+            color: #0575e6;
+            text-decoration: underline;
+            transition: color 0.3s;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .hover-text:hover {
+            color: #021b79;
+            text-shadow: 0 2px 8px rgba(64, 158, 255, 0.2);
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin: 28px 0 18px 0;
+        }
+
+        .main-btn {
+            padding: 12px 34px;
+            border-radius: 32px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            box-shadow: 0 3px 12px rgba(60, 120, 200, 0.13);
+            outline: none;
+            transition: 
+                background 0.24s, 
+                color 0.18s, 
+                transform 0.2s,
+                box-shadow 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-blue {
+            background: linear-gradient(90deg, #56CCF2 0%, #2F80ED 100%);
+            color: white;
+            border: none;
+        }
+        .btn-blue:hover {
+            background: linear-gradient(90deg, #2F80ED 0%, #56CCF2 100%);
+            box-shadow: 0 8px 24px 0 rgba(86,204,242,0.25);
+            color: #fff;
+            transform: translateY(-4px) scale(1.05) rotate(-2deg);
+        }
+
+        .btn-green {
+            background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%);
+            color: #fff;
+            border: none;
+        }
+        .btn-green:hover {
+            background: linear-gradient(90deg, #38f9d7 0%, #43e97b 100%);
+            color: #fff;
+            box-shadow: 0 8px 24px 0 rgba(67,233,123,0.25);
+            transform: translateY(-4px) scale(1.05) rotate(2deg);
+        }
+
+        .btn-orange {
+            background: linear-gradient(90deg, #f7971e 0%, #ffd200 100%);
+            color: #fff;
+            border: none;
+        }
+        .btn-orange:hover {
+            background: linear-gradient(90deg, #ffd200 0%, #f7971e 100%);
+            box-shadow: 0 8px 24px 0 rgba(247,151,30,0.2);
+            color: #fff;
+            transform: translateY(-4px) scale(1.07) rotate(-1deg);
+        }
+
+        .main-btn:active {
+            transform: scale(0.96);
+        }
+
+        /* 按钮水波纹效果 */
+        .main-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.3);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+        
+        .main-btn:focus::after {
+            animation: ripple 1s ease-out;
+        }
+        
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(20, 20);
+                opacity: 0;
+            }
+        }
+
+        hr {
+            margin: 24px 0;
+            opacity: 0.2;
+            border: none;
+            border-top: 1.5px solid #a3c8f4;
+        }
+
+        /* Dialog Styles */
+        .dialog-mask {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(30,60,114,0.25);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            transition: background 0.25s;
+        }
+        .dialog-mask.active { display: flex; }
+
+        .dialog-content {
+            background: rgba(255,255,255,0.95);
+            border-radius: 16px;
+            width: 500px;
+            padding: 28px 28px 18px 28px;
+            position: relative;
+            box-shadow: 0 8px 32px rgba(30,60,114,0.25);
+            animation: popupIn 0.33s cubic-bezier(.23,1.01,.32,1.01);
+            border: 2px solid rgba(255,255,255,0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        @keyframes popupIn {
+            0% { transform: scale(0.85) translateY(30px); opacity: 0; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        .dialog-header {
+            font-size: 20px;
+            font-weight: 700;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e0f0ff;
+            margin-bottom: 22px;
+            color: #021b79;
+        }
+
+        .form-group {
+            text-align: left;
+            margin-bottom: 18px;
+        }
+        .form-label {
+            display: block;
+            margin-bottom: 7px;
+            color: #333;
+            font-weight: 500;
+        }
+        .form-input, .form-input:focus {
+            width: 100%;
+            padding: 9px 12px;
+            border: 1.5px solid #cbe0fc;
+            border-radius: 6px;
+            font-size: 15px;
+            outline: none;
+            transition: border 0.2s;
+            background: rgba(240,248,255,0.9);
+            resize: none;
+        }
+        .form-input:focus {
+            border: 1.5px solid #0575e6;
+            background: rgba(230,245,255,0.9);
+        }
+        textarea.form-input {
+            min-height: 60px;
+        }
+
+        .dialog-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 14px;
+            margin-top: 18px;
+        }
+
+        .close-btn {
+            padding: 9px 20px;
+            border: 1.5px solid #cbe0fc;
+            border-radius: 28px;
+            cursor: pointer;
+            background: #f5faff;
+            transition: background 0.2s, border 0.2s, color 0.2s;
+            font-weight: 500;
+            color: #0575e6;
+            font-size: 15px;
+        }
+        .close-btn:hover {
+            background: #eaf3ff;
+            border: 1.5px solid #0575e6;
+            color: #021b79;
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 500px) {
+            .container {
+                width: 85%;
+                padding: 24px 18px;
+            }
+            .dialog-content {
+                width: 85%;
+                padding: 20px 18px;
+            }
+            .button-group {
+                flex-direction: column;
+                gap: 12px;
+            }
+            .container h1 {
+                font-size: 1.8rem;
+            }
+            .container h1::before, .container h1::after {
+                width: 20px;
+            }
+            .container h1::before {
+                left: 15%;
+            }
+            .container h1::after {
+                right: 15%;
+            }
+        }
+        </style>
+</body>
+</html>

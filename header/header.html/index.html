@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- 动态波浪背景 -->
+        <div class="ocean-waves">
+            <div class="wave wave-1"></div>
+            <div class="wave wave-2"></div>
+            <div class="wave wave-3"></div>
+        </div>
+        <!-- 阳光穿透效果 -->
+        <div class="sun-rays"></div>
+        <!-- 海底光影效果 -->
+        <div class="ocean-floor"></div>
+        <!-- 海洋生物装饰 -->
+        <div class="sea-creature jellyfish" style="top: 30%; left: 10%; animation-delay: 0s;"></div>
+        <div class="sea-creature jellyfish" style="top: 60%; left: 80%; animation-delay: 2s;"></div>
+        <div class="sea-creature jellyfish" style="top: 40%; left: 60%; animation-delay: 4s;"></div>
+        <div class="sea-creature fish" style="top: 50%; left: -30px; animation-delay: 0s;"></div>
+        <div class="sea-creature fish" style="top: 70%; left: -30px; animation-delay: 5s;"></div>
+        <!-- 粒子背景 -->
+        <div id="tsparticles"></div>
+        <div id="app">
+            <div class="container">
+                <h1>漂流瓶 - Ocean Whisper</h1>
+                <p class="info-text">
+                    当前有
+                    <span id="count">740</span>
+                    只瓶子孤独地漂浮在海洋上
+                </p>
+                <p class="info-text">
+                    <span class="hover-text">点击探索神秘漂流瓶</span>
+                </p>
+                <div class="button-group">
+                    <button type="button" class="main-btn btn-blue" id="openRandom">捞一个</button>
+                    <button type="button" class="main-btn btn-green" id="openPrecise">精准打捞</button>
+                    <button type="button" class="main-btn btn-orange" id="openThrow">丢一个</button>
+                </div>
+                <hr>
+            </div>
+        </div>
+        <!-- 随机打捞弹窗 -->
+        <div class="dialog-mask" id="randomDialog">
+            <div class="dialog-content">
+                <div class="dialog-header">随机打捞结果</div>
+                <div id="randomContent">
+                    <div class="loading" style="display: none;">正在深海搜索...</div>
+                    <div class="content" style="display: none;">
+                        <p>瓶子ID：
+                            <span id="randomId"></span>
+                        </p>
+                        <p>作者：
+                            <span id="randomAuthor"></span>
+                        </p>
+                        <p>时间：
+                            <span id="randomTime"></span>
+                        </p>
+                        <p>内容：
+                            <span id="randomContentText"></span>
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">回复内容</label>
+                    <input type="text" class="form-input" id="randomReply">
+                </div>
+                <div class="dialog-footer">
+                    <!-- 添加取消按钮 -->
+                    <button type="button" class="close-btn" id="randomCancel">取消</button>
+                    <button type="button" class="close-btn" id="randomPrev">再捞一个</button>
+                    <button type="button" class="main-btn btn-blue" id="submitRandomReply">提交回复</button>
+                </div>
+            </div>
+        </div>
+        <!-- 精准打捞弹窗 -->
+        <div class="dialog-mask" id="preciseDialog">
+            <div class="dialog-content" id="preciseContent">
+                <div class="dialog-header">精准打捞</div>
+                <div class="stage1">
+                    <div class="form-group">
+                        <label class="form-label">瓶子ID</label>
+                        <input
+                            type="text"
+                            class="form-input"
+                            id="preciseIdInput"
+                            placeholder="输入瓶子编号"
+                        >
+                    </div>
+                    <div class="dialog-footer">
+                        <button type="button" class="close-btn" id="preciseCancel">取消</button>
+                        <button type="button" class="main-btn btn-green" id="preciseSearch">搜索</button>
+                    </div>
+                </div>
+                <div class="stage2" style="display: none;">
+                    <p>瓶子ID：
+                        <span id="preciseId"></span>
+                    </p>
+                    <p>作者：
+                        <span id="preciseAuthor"></span>
+                    </p>
+                    <p>时间：
+                        <span id="preciseTime"></span>
+                    </p>
+                    <p>内容：
+                        <span id="preciseContentText"></span>
+                    </p>
+                    <div class="form-group">
+                        <label class="form-label">精准回复</label>
+                        <input type="text" class="form-input" id="preciseReply">
+                    </div>
+                    <div class="dialog-footer">
+                        <button type="button" class="close-btn" id="preciseBack">返回搜索</button>
+                        <button type="button" class="main-btn btn-green" id="submitPreciseReply">提交回复</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 丢瓶子弹窗 -->
+        <div class="dialog-mask" id="throwDialog">
+            <div class="dialog-content">
+                <div class="dialog-header">扔一个新漂流瓶</div>
+                <div class="form-group">
+                    <label class="form-label">用户名</label>
+                    <input
+                        type="text"
+                        class="form-input"
+                        id="throwUser"
+                        placeholder="一位不愿透露姓名的小可爱"
+                    >
+                </div>
+                <div class="form-group">
+                    <label class="form-label">内容</label>
+                    <textarea
+                        class="form-input"
+                        id="throwContent"
+                        placeholder="输入你想要写入瓶内的悄悄话"
+                        rows="4"
+                    ></textarea>
+                </div>
+                <div class="dialog-footer">
+                    <button type="button" class="close-btn" id="throwCancel">取消</button>
+                    <button type="button" class="main-btn btn-orange" id="submitThrow">扔进海里</button>
+                </div>
+            </div>
+        </div>
+    
+</body>
+</html>

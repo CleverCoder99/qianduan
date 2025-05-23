@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 状态管理对象
+        const appState = {
+            count: 740,
+            random: {
+                loading: false,
+                data: {
+                    id: 376,
+                    author: '匿名小可爱',
+                    time: '2025-03-29 20:27:09',
+                    content: '今晚的月色很美，想和你一起看…'
+                },
+                reply: ''
+            },
+            precise: {
+                stage: 0, // 0: 输入ID阶段, 1: 显示结果阶段
+                data: {},
+                reply: '',
+                id: ''
+            }
+        };
+
+        // 工具函数：显示弹窗
+        function showDialog(dialogId) {
+            document.getElementById(dialogId).style.display = 'flex';
+        }
+
+        // 工具函数：隐藏弹窗
+        function hideDialog(dialogId) {
+            document.getElementById(dialogId).style.display = 'none';
+        }
+
+        // 随机捞取逻辑
+        document.getElementById('openRandom').addEventListener('click', () => {
+            showDialog('randomDialog');
+            appState.random.loading = true;
+            updateRandomDialog();
+            setTimeout(() => {
+                appState.random.loading = false;
+                appState.random.reply = '';
+                updateRandomDialog();
+            }, 800);
+        });
+
+        // 再捞一个
+        document.getElementById('randomPrev').addEventListener('click', () => {
+            appState.random.loading = true;
+            updateRandomDialog();
+            setTimeout(() => {
+                appState.random.data = {
+                    id: Math.floor(Math.random() * 1000),
+                    author: '匿名小可爱',
+                    time: new Date().toLocaleString(),
+                    content: ['今晚的月色很美，想和你一起看…', '今天遇到了一只很可爱的流浪猫～', '最近工作压力有点大，希望明天会更好'][Math.floor(Math.random()*3)]
+                };
+                appState.random.loading = false;
+                updateRandomDialog();
+            }, 800);
+        });
+
+        // 提交随机回复
+        document.getElementById('submitRandomReply').addEventListener('click', () => {
+            const reply = document.getElementById('randomReply').value.trim();
+            if (reply) {
+                alert('回复成功！');
+                hideDialog('randomDialog');
+            } else {
+                alert('回复内容不能为空');
+            }
+        });
+
+        // 精准打捞逻辑
+        document.getElementById('openPrecise').addEventListener('click', () => {
+            showDialog('preciseDialog');
+            appState.precise.stage = 0;
+            appState.precise.id = '';
+            document.getElementById('preciseIdInput').value = '';
+            updatePreciseDialog();
+        });
+
+        // 执行精准搜索
+        document.getElementById('preciseSearch').addEventListener('click', () => {
+            const id = document.getElementById('preciseIdInput').value.trim();
+            if (!id) {
+                alert('请输入瓶子编号');
+                return;
+            }
+            appState.precise.stage = 1;
+            appState.precise.data = {
+                id: id,
+                author: '匿名漂流者',
+                time: new Date().toLocaleString(),
+                content: '我从商店买了个高精度捞网…'
+            };
+            updatePreciseDialog();
+        });
+
+        // 精准回复提交
+        document.getElementById('submitPreciseReply').addEventListener('click', () => {
+            const reply = document.getElementById('preciseReply').value.trim();
+            if (reply) {
+                alert('精准回复成功！');
+                hideDialog('preciseDialog');
+            } else {
+                alert('回复内容不能为空');
+            }
+        });
+
+        // 返回精准搜索输入
+        document.getElementById('preciseBack').addEventListener('click', () => {
+            appState.precise.stage = 0;
+            updatePreciseDialog();
+        });
+
+        // 取消精准打捞
+        document.getElementById('preciseCancel').addEventListener('click', () => {
+            hideDialog('preciseDialog');
+        });
+
+        // 丢瓶子逻辑
+        document.getElementById('openThrow').addEventListener('click', () => {
+            showDialog('throwDialog');
+            document.getElementById('throwUser').value = '';
+            document.getElementById('throwContent').value = '';
+        });
+
+        // 提交丢瓶子
+        document.getElementById('submitThrow').addEventListener('click', () => {
+            const content = document.getElementById('throwContent').value.trim();
+            if (!content) {
+                alert('内容不能为空');
+                return;
+            }
+            appState.count++; // 模拟瓶子数量增加
+            document.getElementById('count').textContent = appState.count;
+            alert('扔瓶成功！');
+            hideDialog('throwDialog');
+        });
+
+        // 取消丢瓶子
+        document.getElementById('throwCancel').addEventListener('click', () => {
+            hideDialog('throwDialog');
+        });
+
+        // 新增：取消随机打捞
+        document.getElementById('randomCancel').addEventListener('click', () => {
+            hideDialog('randomDialog');
+        });
+
+        // 更新随机弹窗内容
+        function updateRandomDialog() {
+            const loadingEl = document.querySelector('#randomContent .loading');
+            const contentEl = document.querySelector('#randomContent .content');
+            const randomReplyEl = document.getElementById('randomReply');
+
+            if (appState.random.loading) {
+                loadingEl.style.display = 'block';
+                contentEl.style.display = 'none';
+            } else {
+                loadingEl.style.display = 'none';
+                contentEl.style.display = 'block';
+                document.getElementById('randomId').textContent = appState.random.data.id;
+                document.getElementById('randomAuthor').textContent = appState.random.data.author;
+                document.getElementById('randomTime').textContent = appState.random.data.time;
+                document.getElementById('randomContentText').textContent = appState.random.data.content;
+                randomReplyEl.value = appState.random.reply;
+            }
+        }
+
+        // 更新精准弹窗内容
+        function updatePreciseDialog() {
+            const stage1El = document.querySelector('#preciseContent .stage1');
+            const stage2El = document.querySelector('#preciseContent .stage2');
+            const preciseBackEl = document.getElementById('preciseBack');
+            const submitPreciseReplyEl = document.getElementById('submitPreciseReply');
+            const preciseSearchEl = document.getElementById('preciseSearch');
+            const preciseCancelEl = document.getElementById('preciseCancel');
+
+            if (appState.precise.stage === 0) {
+                stage1El.style.display = 'block';
+                stage2El.style.display = 'none';
+                preciseBackEl.style.display = 'none';
+                submitPreciseReplyEl.style.display = 'none';
+                preciseSearchEl.style.display = 'inline-block';
+                preciseCancelEl.style.display = 'inline-block';
+            } else {
+                stage1El.style.display = 'none';
+                stage2El.style.display = 'block';
+                preciseBackEl.style.display = 'inline-block';
+                submitPreciseReplyEl.style.display = 'inline-block';
+                preciseSearchEl.style.display = 'none';
+                preciseCancelEl.style.display = 'none';
+                document.getElementById('preciseId').textContent = appState.precise.data.id;
+                document.getElementById('preciseAuthor').textContent = appState.precise.data.author;
+                document.getElementById('preciseTime').textContent = appState.precise.data.time;
+                document.getElementById('preciseContentText').textContent = appState.precise.data.content;
+            }
+        }
+
+        // 初始化时更新计数
+        document.getElementById('count').textContent = appState.count;
+
+        // 粒子海洋特效配置（星光水母主题）
+        window.addEventListener('DOMContentLoaded', () => {
+            tsParticles.load("tsparticles", {
+                fullScreen: { enable: false },
+                background: { color: "transparent" },
+                particles: {
+                    number: { value: 45, density: { enable: true, area: 1800 } },
+                    color: { 
+                        value: ["#89CFF0", "#B0E0E6", "#E0F7FA", "#48D1CC"], // 海洋蓝调渐变
+                        animation: {
+                            enable: true,
+                            speed: 2,
+                            sync: true
+                        }
+                    },
+                    shape: {
+                        type: ["circle", "polygon", "image"], // 混合圆形/多边形/水母
+                        polygon: { sides: 6 }, // 六边形星光
+                        image: [
+                            { 
+                                src: "https://cdn-icons-png.flaticon.com/512/3280/3280344.png", // 水母图标
+                                width: 32, 
+                                height: 32,
+                                ratio: 1 // 保持原始比例
+                            }
+                        ]
+                    },
+                    opacity: { 
+                        value: 0.8, 
+                        random: { enable: true, minimumValue: 0.3 },
+                        animation: {
+                            enable: true,
+                            speed: 1.2,
+                            minimumValue: 0.2,
+                            sync: false
+                        }
+                    },
+                    size: { 
+                        value: { min: 4, max: 16 }, 
+                        random: true,
+                        animation: {
+                            enable: true,
+                            speed: 3,
+                            minimumValue: 2,
+                            sync: false
+                        }
+                    },
+                    move: {
+                        enable: true,
+                        speed: { min: 0.8, max: 1.8 },
+                        direction: "top-right", // 整体向东北方向流动
+                        straight: false,
+                        outMode: "out",
+                        random: true,
+                        attract: {
+                            enable: true,
+                            rotateX: 2000,
+                            rotateY: 1500
+                        },
+                        trail: { // 拖尾效果
+                            enable: true,
+                            length: 8,
+                            fill: { color: { value: "rgba(137, 207, 240, 0.2)" } }
+                        }
+                    }
+                },
+                interactivity: {
+                    events: {
+                        onHover: { 
+                            enable: true, 
+                            mode: ["bubble", "repulse"], // 悬停时气泡+推开效果
+                            parallax: { enable: true, force: 6, smooth: 10 }
+                        },
+                        onClick: { 
+                            enable: true, 
+                            mode: "push", // 点击生成新粒子
+                            size: { value: 20, animation: { enable: true, speed: 40 } }
+                        }
+                    },
+                    modes: {
+                        bubble: { 
+                            distance: 120, 
+                            size: 24, 
+                            duration: 1.2, 
+                            opacity: 0.9,
+                            color: { value: "#89CFF0" }
+                        },
+                        repulse: { 
+                            distance: 180, 
+                            duration: 1.5 
+                        },
+                        push: { quantity: 8 }
+                    }
+                }, 
+                detectRetina: true,
+                backgroundMask: { // 背景遮罩增强层次感
+                    enable: true,
+                    cover: { color: { value: "rgba(2, 27, 121, 0.15)" } }
+                },
+                emitters: { // 随机生成器模拟水母群游
+                    direction: "top-right",
+                    rate: { delay: 2.5, quantity: 1 },
+                    size: { width: 100, height: 0 },
+                    position: { x: 50, y: 110 }, // 从底部中间生成
+                    particles: {
+                        shape: { type: "image" }, // 仅生成水母图标
+                        size: { value: { min: 8, max: 14 } },
+                        opacity: { value: 0.7 }
+                    }
+                }
+            });
+        });
+        </script>
+    
+</body>
+</html>
