@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>捞瓶子</title>
+</head>
+<body>
+<script>
+// 随机捞取逻辑
+    document.getElementById('openRandom').addEventListener('click', () => {
+      showDialog('randomDialog');
+      appState.random.loading = true;
+      updateRandomDialog();
+      setTimeout(() => {
+        appState.random.loading = false;
+        appState.random.reply = '';
+        updateRandomDialog();
+      }, 800);
+    });
+
+    // 再捞一个
+    document.getElementById('randomPrev').addEventListener('click', () => {
+      appState.random.loading = true;
+      updateRandomDialog();
+      setTimeout(() => {
+        appState.random.data = {
+          id: Math.floor(Math.random() * 1000),
+          author: '匿名小可爱',
+          time: new Date().toLocaleString(),
+          content: ['今晚的月色很美，想和你一起看…', '今天遇到了一只很可爱的流浪猫～', '最近工作压力有点大，希望明天会更好'][Math.floor(Math.random()*3)]
+        };
+        appState.random.loading = false;
+        updateRandomDialog();
+      }, 800);
+    });
+
+    // 提交随机回复
+    document.getElementById('submitRandomReply').addEventListener('click', () => {
+      if (appState.random.reply.trim()) {
+        alert('回复成功！');
+        hideDialog('randomDialog');
+      } else {
+        alert('回复内容不能为空');
+      }
+    });
+
+    // 精准打捞逻辑
+    document.getElementById('openPrecise').addEventListener('click', () => {
+      showDialog('preciseDialog');
+      appState.precise.stage = 0;
+      appState.precise.id = '';
+      document.getElementById('preciseIdInput').value = '';
+      updatePreciseDialog();
+    });
+
+    // 执行精准搜索
+    document.getElementById('preciseSearch').addEventListener('click', () => {
+      const id = document.getElementById('preciseIdInput').value.trim();
+      if (!id) {
+        alert('请输入瓶子编号');
+        return;
+      }
+      appState.precise.stage = 1;
+      appState.precise.data = {
+        id: id,
+        author: '匿名漂流者',
+        time: new Date().toLocaleString(),
+        content: '我从商店买了个高精度捞网…'
+      };
+      updatePreciseDialog();
+    });
+
+    // 精准回复提交
+    document.getElementById('submitPreciseReply').addEventListener('click', () => {
+      const reply = document.getElementById('preciseReply').value.trim();
+      if (reply) {
+        alert('精准回复成功！');
+        hideDialog('preciseDialog');
+      } else {
+        alert('回复内容不能为空');
+      }
+    });
+
+    // 返回精准搜索输入
+    document.getElementById('preciseBack').addEventListener('click', () => {
+      appState.precise.stage = 0;
+      updatePreciseDialog();
+    });
+
+    // 取消精准打捞
+    document.getElementById('preciseCancel').addEventListener('click', () => {
+      hideDialog('preciseDialog');
+    });
+</script>
+</body>
+</html>
